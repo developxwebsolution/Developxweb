@@ -1,0 +1,33 @@
+import {
+  Code2,
+  LayoutTemplate,
+  AppWindow,
+  Server,
+  ShoppingCart,
+  Database,
+  Search,
+  Wrench,
+  RefreshCw,
+  Layers,
+  Gauge,
+  Shield,
+  Smartphone,
+  type LucideIcon,
+} from "lucide-react";
+
+export const ICONS: Record<string, LucideIcon> = {
+  code: Code2,
+  layout: LayoutTemplate,
+  "app-window": AppWindow,
+  server: Server,
+  "shopping-cart": ShoppingCart,
+  wordpress: Layers,
+  database: Database,
+  search: Search,
+  wrench: Wrench,
+  "refresh-cw": RefreshCw,
+  layers: Layers,
+  gauge: Gauge,
+  shield: Shield,
+  smartphone: Smartphone,
+};
