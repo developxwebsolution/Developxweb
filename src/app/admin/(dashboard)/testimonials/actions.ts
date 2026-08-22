@@ -24,8 +24,8 @@ export async function createTestimonial(_prev: TestimonialFormState, formData: F
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message };
 
   await db.insert(testimonials).values({ ...parsed.data, status: "published" });
-  revalidatePath("/admin/testimonials");
-  revalidatePath("/testimonials");
+    revalidatePath("/admin/testimonials");
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
@@ -35,14 +35,14 @@ export async function updateTestimonial(id: string, _prev: TestimonialFormState,
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message };
 
   await db.update(testimonials).set(parsed.data).where(eq(testimonials.id, id));
-  revalidatePath("/admin/testimonials");
-  revalidatePath("/testimonials");
+    revalidatePath("/admin/testimonials");
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
 export async function deleteTestimonial(id: string) {
   await requireAdmin();
   await db.delete(testimonials).where(eq(testimonials.id, id));
-  revalidatePath("/admin/testimonials");
-  revalidatePath("/testimonials");
+    revalidatePath("/admin/testimonials");
+  revalidatePath("/", "layout");
 }

@@ -20,8 +20,8 @@ export async function createFaq(_prev: FaqFormState, formData: FormData): Promis
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message };
 
   await db.insert(faqs).values({ question: parsed.data.question, answer: parsed.data.answer, status: "published" });
-  revalidatePath("/admin/faqs");
-  revalidatePath("/faq");
+    revalidatePath("/admin/faqs");
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
@@ -31,14 +31,14 @@ export async function updateFaq(id: string, _prev: FaqFormState, formData: FormD
   if (!parsed.success) return { ok: false, error: parsed.error.issues[0]?.message };
 
   await db.update(faqs).set({ question: parsed.data.question, answer: parsed.data.answer }).where(eq(faqs.id, id));
-  revalidatePath("/admin/faqs");
-  revalidatePath("/faq");
+    revalidatePath("/admin/faqs");
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
 export async function deleteFaq(id: string) {
   await requireAdmin();
   await db.delete(faqs).where(eq(faqs.id, id));
-  revalidatePath("/admin/faqs");
-  revalidatePath("/faq");
+    revalidatePath("/admin/faqs");
+  revalidatePath("/", "layout");
 }
