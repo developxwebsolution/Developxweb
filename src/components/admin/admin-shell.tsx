@@ -58,8 +58,16 @@ export function AdminShell({ children, role }: { children: React.ReactNode; role
     <div className="flex min-h-screen bg-paper-raised">
       <aside className="hidden w-64 shrink-0 flex-col border-r border-line bg-paper lg:flex">
         <div className="flex h-16 items-center gap-2 border-b border-line px-5 font-display text-base font-semibold text-ink">
-          <span className="flex size-7 items-center justify-center rounded-md bg-indigo text-sm text-white">D</span>
-          {site.shortName} Admin
+           <img
+            src="https://res.cloudinary.com/vatxiwgf/image/upload/v1787412844/developx-web/essrp4a2g4i98t9ogpgp.webp"
+             alt="DevelopXWeb Logo"
+            onError={(e) => {
+    e.currentTarget.src = "/logo-icon.webp";
+  }}
+      
+           
+            className="h-20 w-auto object-contain"
+          />
         </div>
         <nav className="flex-1 space-y-0.5 overflow-y-auto px-3 py-4">
           {nav.map((item) => {
