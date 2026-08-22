@@ -7,6 +7,7 @@ import type { PostFormState } from "./actions";
 type Post = {
   slug: string;
   title: string;
+  featuredImage?: string;
   excerpt: string;
   content: string[];
   category: string;
@@ -30,6 +31,9 @@ export function PostForm({
         <Field label="Title">
           <input name="title" required defaultValue={defaultValues?.title} className={inputClass} />
         </Field>
+        <Field label="Featured image URL (paste from Media Library)">
+  <input name="featuredImage" defaultValue={defaultValues?.featuredImage ?? ""} className={inputClass} placeholder="https://res.cloudinary.com/..." />
+</Field>
         <Field label="Slug (used in the URL)">
           <input name="slug" required pattern="[a-z0-9-]+" defaultValue={defaultValues?.slug} className={inputClass} placeholder="my-post-title" />
         </Field>

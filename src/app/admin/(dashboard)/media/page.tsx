@@ -6,7 +6,7 @@ import { requireSession } from "@/lib/session";
 import { cloudinaryConfigured } from "@/lib/cloudinary";
 import { MediaUploadForm } from "./media-upload-form";
 import { DeleteMediaButton } from "./delete-media-button";
-
+import { CopyUrlButton } from "./copy-url-button";
 export default async function AdminMediaPage() {
   await requireSession();
   const rows = await db.select().from(media).orderBy(desc(media.createdAt));
@@ -39,7 +39,10 @@ export default async function AdminMediaPage() {
               <div className="absolute inset-0 flex items-end justify-between bg-gradient-to-t from-black/60 to-transparent p-2 opacity-0 transition-opacity group-hover:opacity-100">
                 <span className="truncate text-xs text-white">{(m.size / 1024).toFixed(0)} KB</span>
                 <div className="rounded-full bg-white/90">
-                  <DeleteMediaButton id={m.id} filename={m.filename} />
+                <div className="rounded-full bg-white/90"><CopyUrlButton url={m.url} /></div>
+<div className="rounded-full bg-white/90"><DeleteMediaButton id={m.id} filename={m.filename} /></div>
+                
+                  
                 </div>
               </div>
             </div>

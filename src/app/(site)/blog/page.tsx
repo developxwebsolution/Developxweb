@@ -36,6 +36,9 @@ export default async function BlogIndexPage() {
         <Container className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {blogPosts.map((post) => (
             <Link key={post.slug} href={`/blog/${post.slug}`} className="group flex flex-col gap-3 rounded-2xl border border-line p-6 transition-colors hover:border-indigo">
+              {post.featuredImage ? (
+  <img src={post.featuredImage} alt={post.title} className="mb-3 h-40 w-full rounded-xl object-cover" />
+) : null}
               <span className="font-mono text-xs uppercase tracking-wider text-indigo">{post.category}</span>
               <h2 className="font-display text-lg font-semibold leading-snug text-ink">{post.title}</h2>
               <p className="line-clamp-3 text-sm leading-6 text-ink-soft">{post.excerpt}</p>

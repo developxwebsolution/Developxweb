@@ -112,6 +112,7 @@ function rowToBlogPost(row: typeof blogPostsTable.$inferSelect): BlogPost {
     readTime: row.readTime,
     author: row.author,
     content: row.content,
+    featuredImage: row.featuredImage,
   };
 }
 

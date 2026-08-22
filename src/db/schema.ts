@@ -151,6 +151,7 @@ export const blogPosts = pgTable("blog_posts", {
   slug: text("slug").notNull().unique(),
   title: text("title").notNull(),
   excerpt: text("excerpt").notNull(),
+  featuredImage: text("featured_image"),
   content: jsonb("content").$type<string[]>().notNull().default([]),
   category: text("category").notNull(),
   author: text("author").notNull(),

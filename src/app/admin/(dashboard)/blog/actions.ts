@@ -22,6 +22,7 @@ const postSchema = z.object({
   author: z.string().trim().min(1).max(200),
   readTime: z.string().trim().min(1).max(50),
   status: z.enum(["draft", "published", "archived"]),
+  featuredImage: z.string().trim().url().optional().or(z.literal("")),
 });
 
 export type PostFormState = { ok: boolean; error?: string; slug?: string };

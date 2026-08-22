@@ -48,6 +48,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <Container className="max-w-2xl">
           <Eyebrow>{post.category}</Eyebrow>
           <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">{post.title}</h1>
+          {post.featuredImage ? (
+  <img src={post.featuredImage} alt={post.title} className="mt-6 w-full rounded-2xl object-cover" style={{ maxHeight: 400 }} />
+) : null}
           <div className="mt-4 flex items-center gap-3 text-xs text-ink-soft">
             <span>{post.author}</span>
             <span>·</span>
