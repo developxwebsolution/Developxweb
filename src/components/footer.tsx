@@ -56,9 +56,7 @@ export function Footer({
             alt="DevelopX Web Logo"
             width={80}
             height={80}
-            onError={(e) => {
-              e.currentTarget.src = "/logo-icon.webp";
-            }}
+           
             className="h-20 w-auto object-contain"
           />
         </Link>
