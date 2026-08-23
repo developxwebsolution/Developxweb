@@ -48,14 +48,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-paper text-ink">
-        <ThemeProvider>{children}</ThemeProvider>
-            <body className="min-h-full flex flex-col bg-paper text-ink">
+       <body className="min-h-full flex flex-col bg-paper text-ink">
         <ThemeProvider>{children}</ThemeProvider>
         <JsonLd data={organizationSchema()} />
         <GoogleAnalytics />
-      </body>
-        <JsonLd data={organizationSchema()} />
       </body>
     </html>
   );
