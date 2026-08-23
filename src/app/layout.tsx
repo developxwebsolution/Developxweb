@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { JsonLd } from "@/components/json-ld";
 import { organizationSchema } from "@/lib/seo";
 import { site } from "@/data/site";
+import { GoogleAnalytics } from "@/components/google-analytics";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin"] });
@@ -49,6 +50,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col bg-paper text-ink">
         <ThemeProvider>{children}</ThemeProvider>
+            <body className="min-h-full flex flex-col bg-paper text-ink">
+        <ThemeProvider>{children}</ThemeProvider>
+        <JsonLd data={organizationSchema()} />
+        <GoogleAnalytics />
+      </body>
         <JsonLd data={organizationSchema()} />
       </body>
     </html>
