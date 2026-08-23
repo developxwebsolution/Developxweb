@@ -5,7 +5,7 @@ import Script from "next/script";
 const GA_MEASUREMENT_ID = "G-PLWP1PWRZR"; // apna real Measurement ID yahan daalo
 
 export function GoogleAnalytics() {
-  if (!GA_MEASUREMENT_ID || GA_MEASUREMENT_ID === "G-PLWP1PWRZR") return null;
+  if (!GA_MEASUREMENT_ID) return null;
 
   return (
     <>
