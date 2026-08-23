@@ -27,10 +27,15 @@ export function Navbar({
   cities: City[];
   primaryLinks?: { href: string; label: string }[];
 }) {
-  const navLinks = primaryLinks && primaryLinks.length > 0 ? primaryLinks : FALLBACK_PRIMARY_LINKS;
+  const navLinks =
+    primaryLinks && primaryLinks.length > 0
+      ? primaryLinks
+      : FALLBACK_PRIMARY_LINKS;
   const [open, setOpen] = useState(false);
   const [menu, setMenu] = useState<"services" | "cities" | null>(null);
-  const [mobileSection, setMobileSection] = useState<"services" | "cities" | null>(null);
+  const [mobileSection, setMobileSection] = useState<
+    "services" | "cities" | null
+  >(null);
 
   // Lock body scroll while the mobile menu is open, and close on Escape —
   // same pattern used by the lead popup, for consistent behavior site-wide.
@@ -68,52 +73,51 @@ export function Navbar({
           <span className="flex size-7 items-center justify-center rounded-md bg-indigo text-sm text-white">D</span>
           {site.shortName}
         </Link> */}
-            {/* Logo */}
-        <Link
-          href="/"
-          className="flex shrink-0 items-center"
-        >
+        {/* Logo */}
+        <Link href="/" className="flex shrink-0 items-center">
           <img
             src="https://res.cloudinary.com/vatxiwgf/image/upload/v1787412844/developx-web/essrp4a2g4i98t9ogpgp.webp"
-             alt="DevelopXWeb Logo"
+            alt="DevelopX Web Logo"
+            width={80}
+            height={80}
             onError={(e) => {
-    e.currentTarget.src = "/logo-icon.webp";
-  }}
-      
-           
+              e.currentTarget.src = "/logo-icon.webp";
+            }}
             className="h-20 w-auto object-contain"
           />
-        
         </Link>
 
-        <nav className="hidden items-center gap-1 lg:flex" onMouseLeave={() => setMenu(null)}>
+        <nav
+          className="hidden items-center gap-1 lg:flex"
+          onMouseLeave={() => setMenu(null)}
+        >
           <div className="relative" onMouseEnter={() => setMenu("services")}>
             <button className="flex items-center gap-1 rounded-full px-3.5 py-2 text-sm text-ink-soft transition-colors hover:text-ink cursor-pointer">
               Services <ChevronDown className="size-3.5" />
             </button>
             {menu === "services" && (
               <div className="fixed left-0 right-0  w-full pt-3">
-                 <div className="border-y border-line bg-paper shadow-2xl shadow-black/10">
-                 <Container>
-                <div className="grid grid-cols-4 gap-1 py-5">
-                  {services.slice(0, 16).map((s) => (
-                    <Link
-                      key={s.slug}
-                      href={`/services/${s.slug}`}
-                      className="rounded-lg px-3 py-2.5 text-sm text-ink-soft transition-colors hover:bg-indigo-soft hover:text-indigo"
-                    >
-                      {s.shortName}
-                    </Link>
-                  ))}
-                  <Link
-                    href="/services"
-                    className="col-span-4 mt-2 flex items-center justify-between border-t border-line px-4 pt-4 text-sm font-medium text-indigo"
-                  >
-                    View all services <ArrowUpRight className="size-3.5" />
-                  </Link>
+                <div className="border-y border-line bg-paper shadow-2xl shadow-black/10">
+                  <Container>
+                    <div className="grid grid-cols-4 gap-1 py-5">
+                      {services.slice(0, 16).map((s) => (
+                        <Link
+                          key={s.slug}
+                          href={`/services/${s.slug}`}
+                          className="rounded-lg px-3 py-2.5 text-sm text-ink-soft transition-colors hover:bg-indigo-soft hover:text-indigo"
+                        >
+                          {s.shortName}
+                        </Link>
+                      ))}
+                      <Link
+                        href="/services"
+                        className="col-span-4 mt-2 flex items-center justify-between border-t border-line px-4 pt-4 text-sm font-medium text-indigo"
+                      >
+                        View all services <ArrowUpRight className="size-3.5" />
+                      </Link>
+                    </div>
+                  </Container>
                 </div>
-                </Container>
-              </div>
               </div>
             )}
           </div>
@@ -125,24 +129,23 @@ export function Navbar({
             {menu === "cities" && (
               <div className="fixed left-0 right-0  w-full pt-3">
                 <div className="border-y border-line bg-paper shadow-2xl shadow-black/10">
-                 <Container>
+                  <Container>
                     <div className="grid grid-cols-4 gap-1 py-5">
                       {cities.slice(0, 16).map((c) => (
-                
-                    <Link
-                      key={c.slug}
-                      href={`/web-development-company-${c.slug}`}
-                      className="rounded-lg px-3 py-2.5 text-sm text-ink-soft transition-colors hover:bg-indigo-soft hover:text-indigo"
-                    >
-                      {c.name}
-                    </Link>
-                  ))}
-                  <Link
-                    href="/locations"
-                    className="col-span-4 mt-2 flex items-center justify-between border-t border-line px-4 pt-4 text-sm font-medium text-indigo"
-                  >
-                    View all cities <ArrowUpRight className="size-3.5" />
-                  </Link>
+                        <Link
+                          key={c.slug}
+                          href={`/web-development-company-${c.slug}`}
+                          className="rounded-lg px-3 py-2.5 text-sm text-ink-soft transition-colors hover:bg-indigo-soft hover:text-indigo"
+                        >
+                          {c.name}
+                        </Link>
+                      ))}
+                      <Link
+                        href="/locations"
+                        className="col-span-4 mt-2 flex items-center justify-between border-t border-line px-4 pt-4 text-sm font-medium text-indigo"
+                      >
+                        View all cities <ArrowUpRight className="size-3.5" />
+                      </Link>
                     </div>
                   </Container>
                 </div>
@@ -151,7 +154,11 @@ export function Navbar({
           </div>
 
           {navLinks.map((l) => (
-            <Link key={l.href} href={l.href} className="rounded-full px-3.5 py-2 text-sm text-ink-soft transition-colors hover:text-ink">
+            <Link
+              key={l.href}
+              href={l.href}
+              className="rounded-full px-3.5 py-2 text-sm text-ink-soft transition-colors hover:text-ink"
+            >
               {l.label}
             </Link>
           ))}
@@ -181,17 +188,26 @@ export function Navbar({
       </Container>
 
       {open && (
-        <div data-testid="mobile-menu" className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-paper lg:hidden">
+        <div
+          data-testid="mobile-menu"
+          className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-paper lg:hidden"
+        >
           <Container className="flex flex-col gap-1 py-4">
             {/* Services — expandable, shows every service, not just a link to the index */}
             <div className="rounded-lg">
               <button
-                onClick={() => setMobileSection(mobileSection === "services" ? null : "services")}
+                onClick={() =>
+                  setMobileSection(
+                    mobileSection === "services" ? null : "services",
+                  )
+                }
                 aria-expanded={mobileSection === "services"}
                 className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm text-ink cursor-pointer"
               >
                 Services
-                <ChevronDown className={`size-4 text-ink-soft transition-transform ${mobileSection === "services" ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  className={`size-4 text-ink-soft transition-transform ${mobileSection === "services" ? "rotate-180" : ""}`}
+                />
               </button>
               {mobileSection === "services" && (
                 <div className="ml-3 flex max-h-64 flex-col gap-0.5 overflow-y-auto border-l border-line pb-1 pl-3">
@@ -219,12 +235,16 @@ export function Navbar({
             {/* Locations — expandable, shows every city, not just a link to the index */}
             <div className="rounded-lg">
               <button
-                onClick={() => setMobileSection(mobileSection === "cities" ? null : "cities")}
+                onClick={() =>
+                  setMobileSection(mobileSection === "cities" ? null : "cities")
+                }
                 aria-expanded={mobileSection === "cities"}
                 className="flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-sm text-ink cursor-pointer"
               >
                 Locations
-                <ChevronDown className={`size-4 text-ink-soft transition-transform ${mobileSection === "cities" ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  className={`size-4 text-ink-soft transition-transform ${mobileSection === "cities" ? "rotate-180" : ""}`}
+                />
               </button>
               {mobileSection === "cities" && (
                 <div className="ml-3 flex max-h-64 flex-col gap-0.5 overflow-y-auto border-l border-line pb-1 pl-3">
@@ -250,7 +270,12 @@ export function Navbar({
             </div>
 
             {navLinks.map((l) => (
-              <Link key={l.href} href={l.href} onClick={closeMobileMenu} className="rounded-lg px-3 py-2.5 text-sm text-ink">
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={closeMobileMenu}
+                className="rounded-lg px-3 py-2.5 text-sm text-ink"
+              >
                 {l.label}
               </Link>
             ))}

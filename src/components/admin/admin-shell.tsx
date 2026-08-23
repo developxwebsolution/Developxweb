@@ -58,14 +58,14 @@ export function AdminShell({ children, role }: { children: React.ReactNode; role
     <div className="flex min-h-screen bg-paper-raised">
       <aside className="hidden w-64 shrink-0 flex-col border-r border-line bg-paper lg:flex">
         <div className="flex h-16 items-center gap-2 border-b border-line px-5 font-display text-base font-semibold text-ink">
-           <img
+          <img
             src="https://res.cloudinary.com/vatxiwgf/image/upload/v1787412844/developx-web/essrp4a2g4i98t9ogpgp.webp"
-             alt="DevelopXWeb Logo"
+            alt="DevelopX Web Logo"
+            width={80}
+            height={80}
             onError={(e) => {
-    e.currentTarget.src = "/logo-icon.webp";
-  }}
-      
-           
+              e.currentTarget.src = "/logo-icon.webp";
+            }}
             className="h-20 w-auto object-contain"
           />
         </div>

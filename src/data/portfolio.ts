@@ -11,6 +11,7 @@ export type Project = {
   results: { label: string; value: string }[];
   stack: string[];
   year: string;
+  image?: string | null;
   color: string;
 };
 

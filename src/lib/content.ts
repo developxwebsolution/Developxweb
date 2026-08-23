@@ -148,6 +148,7 @@ function rowToProject(row: typeof portfolioProjectsTable.$inferSelect): Project 
     results: row.results,
     stack: row.stack,
     year: row.year,
+    image: row.image,
     color: row.color,
   };
 }

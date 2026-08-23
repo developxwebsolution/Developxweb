@@ -51,9 +51,14 @@ export function Footer({
           href="/"
           className="flex shrink-0 items-center"
         >
-          <img
-            src="/logo-icon.webp"
-            alt="Laser Web Maker"
+           <img
+            src="https://res.cloudinary.com/vatxiwgf/image/upload/v1787412844/developx-web/essrp4a2g4i98t9ogpgp.webp"
+            alt="DevelopX Web Logo"
+            width={80}
+            height={80}
+            onError={(e) => {
+              e.currentTarget.src = "/logo-icon.webp";
+            }}
             className="h-20 w-auto object-contain"
           />
         </Link>

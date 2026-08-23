@@ -225,22 +225,31 @@ export default async function HomePage() {
               Read the blog
             </Button>
           </div>
-          <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
-            {blogPosts.slice(0, 3).map((post) => (
-              <Link
-                key={post.slug}
-                href={`/blog/${post.slug}`}
-                className="group flex flex-col gap-3 rounded-2xl border border-line p-6 transition-colors hover:border-indigo"
-              >
+                  <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
+          {blogPosts.slice(0, 3).map((post) => (
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              className="group flex flex-col overflow-hidden rounded-2xl border border-line transition-colors hover:border-indigo"
+            >
+              {post.featuredImage ? (
+                <img src={post.featuredImage} alt={post.title} className="h-40 w-full object-cover" />
+              ) : (
+                <div className="flex h-40 items-center justify-between bg-gradient-to-br from-indigo-soft to-transparent p-6">
+                  <span className="font-mono text-xs uppercase tracking-wider text-ink-soft">{post.category}</span>
+                </div>
+              )}
+              <div className="flex flex-1 flex-col gap-3 p-6">
                 <span className="font-mono text-xs uppercase tracking-wider text-indigo">{post.category}</span>
                 <h3 className="font-display text-base font-semibold leading-snug text-ink">{post.title}</h3>
                 <p className="line-clamp-3 text-sm leading-6 text-ink-soft">{post.excerpt}</p>
                 <span className="mt-auto flex items-center gap-1 pt-2 text-sm font-medium text-indigo opacity-0 transition-opacity group-hover:opacity-100">
                   Read more <ArrowRight className="size-3.5" />
                 </span>
-              </Link>
-            ))}
-          </div>
+              </div>
+            </Link>
+          ))}
+        </div>
         </Container>
       </section>
 

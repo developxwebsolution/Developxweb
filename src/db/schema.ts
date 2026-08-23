@@ -177,6 +177,7 @@ export const portfolioProjects = pgTable("portfolio_projects", {
   results: jsonb("results").$type<{ label: string; value: string }[]>().notNull().default([]),
   stack: jsonb("stack").$type<string[]>().notNull().default([]),
   year: text("year").notNull(),
+   image: text("image"),
   color: text("color").notNull(),
   status: contentStatusEnum("status").notNull().default("published"),
   createdAt: timestamp("created_at").notNull().defaultNow(),

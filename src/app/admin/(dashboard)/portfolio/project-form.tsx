@@ -11,6 +11,7 @@ type ProjectDefaults = {
   industry: string;
   service: string;
   city: string;
+  image?: string;
   summary: string;
   challenge: string;
   solution: string;
@@ -57,6 +58,9 @@ export function ProjectForm({
         <Field label="Accent color (hex)">
           <input name="color" required defaultValue={defaultValues?.color ?? "#4338CA"} className={inputClass} placeholder="#4338CA" />
         </Field>
+        <Field label="Project image URL (optional — paste from Media Library)">
+  <input name="image" defaultValue={defaultValues?.image ?? ""} className={inputClass} placeholder="https://res.cloudinary.com/..." />
+</Field>
       </div>
 
       <Field label="Summary">

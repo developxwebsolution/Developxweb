@@ -31,9 +31,13 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <Link href={`/portfolio/${project.slug}`} className="group card-raised flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-1">
       <div
-        className="flex h-40 items-center justify-between p-6"
-        style={{ background: `linear-gradient(135deg, ${project.color}22, ${project.color}08)` }}
-      >
+  className="flex h-40 items-center justify-between p-6"
+  style={
+    project.image
+      ? { backgroundImage: `url(${project.image})`, backgroundSize: "cover", backgroundPosition: "center" }
+      : { background: `linear-gradient(135deg, ${project.color}22, ${project.color}08)` }
+  }
+>
         <span className="font-mono text-xs uppercase tracking-wider text-ink-soft">{project.industry.replace("-", " & ")}</span>
         <span className="font-mono text-xs text-ink-soft">{project.year}</span>
       </div>

@@ -51,6 +51,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <Badge key={t}>{t}</Badge>
             ))}
           </div>
+           {project.image ? (
+      <img
+        src={project.image}
+        alt={project.name}
+        className="mt-8 w-full rounded-2xl border border-line object-cover"
+        style={{ maxHeight: 420 }}
+      />
+    ) : null}
         </Container>
       </section>
 
