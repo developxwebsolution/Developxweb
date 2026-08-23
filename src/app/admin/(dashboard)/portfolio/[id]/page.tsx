@@ -17,7 +17,7 @@ export default async function EditProjectPage({ params }: { params: Promise<{ id
   return (
     <div className="p-6 sm:p-8">
       <h1 className="mb-6 font-display text-2xl font-semibold text-ink">Edit portfolio project</h1>
-      <ProjectForm action={boundUpdate} defaultValues={project} />
+      <ProjectForm action={boundUpdate} defaultValues={{ ...project, image: project.image ?? undefined }} />
     </div>
   );
 }
