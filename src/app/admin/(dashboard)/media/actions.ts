@@ -1,11 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
 import { media, auditLogs } from "@/db/schema";
-import { requireEditor, requireAdmin } from "@/lib/session";
+import { requireEditor, requireAdmin, requireSession } from "@/lib/session";
 import { cloudinary, cloudinaryConfigured } from "@/lib/cloudinary";
 
 export type MediaFormState = { ok: boolean; error?: string };
@@ -101,4 +101,11 @@ export async function deleteMedia(id: string) {
   await db.delete(media).where(eq(media.id, id));
   await db.insert(auditLogs).values({ userId: session.user.id, action: "media.deleted", entityType: "media", entityId: id });
   revalidatePath("/admin/media");
+}
+
+
+export async function getMediaList() {
+  await requireSession();
+  const rows = await db.select().from(media).orderBy(desc(media.createdAt));
+  return rows.map((r) => ({ id: r.id, url: r.url, filename: r.filename, altText: r.altText }));
 }

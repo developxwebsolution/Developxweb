@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { AlertCircle } from "lucide-react";
 import type { ProjectFormState } from "./actions";
-
+import { MediaPickerField } from "@/components/admin/media-picker-field";
 type ProjectDefaults = {
   slug: string;
   name: string;
@@ -58,9 +58,9 @@ export function ProjectForm({
         <Field label="Accent color (hex)">
           <input name="color" required defaultValue={defaultValues?.color ?? "#4338CA"} className={inputClass} placeholder="#4338CA" />
         </Field>
-        <Field label="Project image URL (optional — paste from Media Library)">
-  <input name="image" defaultValue={defaultValues?.image ?? ""} className={inputClass} placeholder="https://res.cloudinary.com/..." />
-</Field>
+        
+ <MediaPickerField name="image" label="Project image" defaultValue={defaultValues?.image} />
+
       </div>
 
       <Field label="Summary">
