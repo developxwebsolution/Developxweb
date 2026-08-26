@@ -4,6 +4,8 @@ import { useActionState } from "react";
 import { AlertCircle } from "lucide-react";
 import type { ProjectFormState } from "./actions";
 import { MediaPickerField } from "@/components/admin/media-picker-field";
+import { ImageField } from "@/components/admin/image-field";
+
 type ProjectDefaults = {
   slug: string;
   name: string;
@@ -59,7 +61,7 @@ export function ProjectForm({
           <input name="color" required defaultValue={defaultValues?.color ?? "#4338CA"} className={inputClass} placeholder="#4338CA" />
         </Field>
         
- <MediaPickerField name="image" label="Project image" defaultValue={defaultValues?.image} />
+<ImageField name="image" label="Project image" defaultValue={defaultValues?.image} />
 
       </div>
 

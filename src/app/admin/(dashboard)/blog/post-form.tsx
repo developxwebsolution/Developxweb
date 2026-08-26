@@ -3,7 +3,7 @@ import { MediaPickerField } from "@/components/admin/media-picker-field";
 import { useActionState } from "react";
 import { AlertCircle } from "lucide-react";
 import type { PostFormState } from "./actions";
-
+import { ImageField } from "@/components/admin/image-field";
 type Post = {
   slug: string;
   title: string;
@@ -32,8 +32,8 @@ export function PostForm({
           <input name="title" required defaultValue={defaultValues?.title} className={inputClass} />
         </Field>
         
-          <MediaPickerField name="featuredImage" label="Featured image" defaultValue={defaultValues?.featuredImage ?? null} />
-
+          {/* <MediaPickerField name="featuredImage" label="Featured image" defaultValue={defaultValues?.featuredImage ?? null} /> */}
+<ImageField name="featuredImage" label="Featured image" defaultValue={defaultValues?.featuredImage} />
         <Field label="Slug (used in the URL)">
           <input name="slug" required pattern="[a-z0-9-]+" defaultValue={defaultValues?.slug} className={inputClass} placeholder="my-post-title" />
         </Field>
