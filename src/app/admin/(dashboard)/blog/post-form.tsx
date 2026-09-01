@@ -7,13 +7,13 @@ import { ImageField } from "@/components/admin/image-field";
 type Post = {
   slug: string;
   title: string;
-  featuredImage?: string;
   excerpt: string;
   content: string[];
   category: string;
   author: string;
   readTime: string;
   status: "draft" | "published" | "archived";
+  featuredImage?: string | null;  // ye line add karo agar missing hai
 };
 
 export function PostForm({

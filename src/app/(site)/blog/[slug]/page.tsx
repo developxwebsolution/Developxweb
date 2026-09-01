@@ -6,8 +6,8 @@ import { CtaSection } from "@/components/cta-section";
 import { JsonLd } from "@/components/json-ld";
 import { buildMetadataWithOverride, articleSchema, breadcrumbSchema } from "@/lib/seo";
 import { getBlogPosts, getBlogPostBySlug } from "@/lib/content";
+import { sanitizeBlogParagraph } from "@/lib/render-links";
 import { site } from "@/data/site";
-
 export async function generateStaticParams() {
   const blogPosts = await getBlogPosts();
   return blogPosts.map((p) => ({ slug: p.slug }));
@@ -59,11 +59,19 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             <span>{post.readTime}</span>
           </div>
           <div className="prose-content mt-10 flex flex-col gap-5">
-            {post.content.map((para, i) => (
+            {/* {post.content.map((para, i) => (
               <p key={i} className="text-base leading-7 text-ink-soft">
                 {para}
               </p>
-            ))}
+            ))} */}
+
+            {post.content.map((para, i) => (
+    <p
+      key={i}
+      className="text-base leading-7 text-ink-soft"
+      dangerouslySetInnerHTML={{ __html: sanitizeBlogParagraph(para) }}
+    />
+  ))}
           </div>
         </Container>
       </article>

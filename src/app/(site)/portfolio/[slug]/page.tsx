@@ -5,8 +5,9 @@ import { ProjectCard } from "@/components/cards";
 import { CtaSection } from "@/components/cta-section";
 import { JsonLd } from "@/components/json-ld";
 import { buildMetadataWithOverride, breadcrumbSchema } from "@/lib/seo";
-import { getProjects, getProjectBySlug } from "@/lib/content";
-import { site } from "@/data/site";
+ import { getProjects, getProjectBySlug } from "@/lib/content";
+  import { sanitizeBlogParagraph, toPlainText } from "@/lib/render-links";
+  import { site } from "@/data/site";
 
 export async function generateStaticParams() {
   const projects = await getProjects();
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!project) return {};
   return buildMetadataWithOverride({
     title: `${project.name} Case Study | ${site.name}`,
-    description: project.summary,
+    description: toPlainText(project.summary),
     path: `/portfolio/${project.slug}`,
   });
 }
@@ -45,7 +46,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <Container className="max-w-3xl">
           <Eyebrow>{project.industry.replace("-", " & ")} · {project.city}</Eyebrow>
           <h1 className="font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">{project.name}</h1>
-          <p className="mt-6 text-base leading-7 text-ink-soft">{project.summary}</p>
+          <p
+    className="mt-6 text-base leading-7 text-ink-soft"
+    dangerouslySetInnerHTML={{ __html: sanitizeBlogParagraph(project.summary) }}
+  />
           <div className="mt-6 flex flex-wrap gap-2">
             {project.stack.map((t) => (
               <Badge key={t}>{t}</Badge>

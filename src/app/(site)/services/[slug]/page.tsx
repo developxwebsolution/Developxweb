@@ -8,8 +8,9 @@ import { CtaSection } from "@/components/cta-section";
 import { ICONS } from "@/components/icon-map";
 import { JsonLd } from "@/components/json-ld";
 import { buildMetadataWithOverride, serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/seo";
-import { getServices, getServiceBySlug, getCities } from "@/lib/content";
-import { site } from "@/data/site";
+ import { getServices, getServiceBySlug, getCities } from "@/lib/content";
+  import { sanitizeBlogParagraph, toPlainText } from "@/lib/render-links";
+  import { site } from "@/data/site";
 
 export async function generateStaticParams() {
   const services = await getServices();
@@ -22,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!service) return {};
   return buildMetadataWithOverride({
     title: `${service.name} Company in India | ${site.name}`,
-    description: `${service.summary} Starting at ${service.startingPrice}, typical delivery in ${service.timeline}.`,
+    description: `${toPlainText(service.summary)} Starting at ${service.startingPrice}, typical delivery in ${service.timeline}.`,
     path: `/services/${service.slug}`,
   });
 }
@@ -42,7 +43,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
     <>
       <JsonLd
         data={[
-          serviceSchema({ name: service.name, description: service.description, url: `${site.url}/services/${service.slug}` }),
+         serviceSchema({ name: service.name, description: toPlainText(service.description), url: `${site.url}/services/${service.slug}` }),
           faqSchema(service.faqs),
           breadcrumbSchema([
             { name: "Home", path: "/" },
@@ -61,7 +62,10 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
             </div>
             <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-5xl">{service.name} Company in India</h1>
           </div>
-          <p className="mt-6 text-base leading-7 text-ink-soft">{service.description}</p>
+          <p
+    className="mt-6 text-base leading-7 text-ink-soft"
+    dangerouslySetInnerHTML={{ __html: sanitizeBlogParagraph(service.description) }}
+  />
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Badge>
               <IndianRupee className="mr-1 inline size-3" /> Starting {service.startingPrice}
