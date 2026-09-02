@@ -11,7 +11,9 @@ import {
 } from "@/lib/seo";
 import { getBlogPosts, getBlogPostBySlug } from "@/lib/content";
 import { sanitizeBlogParagraph } from "@/lib/render-links";
+
 import { site } from "@/data/site";
+export const dynamic = "force-dynamic"; 
 export async function generateStaticParams() {
   const blogPosts = await getBlogPosts();
   return blogPosts.map((p) => ({ slug: p.slug }));
