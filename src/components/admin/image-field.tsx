@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { X, ImagePlus, Check } from "lucide-react";
-import { getMediaList } from "@/app/admin/(dashboard)/media/actions";
+import { useState, useRef, useTransition } from "react";
+import { X, ImagePlus, Check, UploadCloud, Loader2, AlertCircle } from "lucide-react";
+import { getMediaList, uploadMedia } from "@/app/admin/(dashboard)/media/actions";
 
 type MediaItem = { id: string; url: string; filename: string; altText: string | null };
 
@@ -19,6 +19,10 @@ export function ImageField({
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState<MediaItem[]>([]);
   const [loading, setLoading] = useState(false);
+  const [dragActive, setDragActive] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploading, startUpload] = useTransition();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   async function openPicker() {
     setOpen(true);
@@ -28,6 +32,39 @@ export function ImageField({
     } finally {
       setLoading(false);
     }
+  }
+
+  function uploadFile(file: File) {
+    setUploadError(null);
+
+    if (!file.type.startsWith("image/")) {
+      setUploadError("Only image files are supported.");
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      setUploadError("File is larger than 8MB. Compress it and try again.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.set("file", file);
+    formData.set("altText", "");
+
+    startUpload(async () => {
+      const result = await uploadMedia({ ok: false }, formData);
+      if (!result.ok || !result.url) {
+        setUploadError(result.error ?? "Upload failed. Try again.");
+        return;
+      }
+      setValue(result.url);
+    });
+  }
+
+  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setDragActive(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) uploadFile(file);
   }
 
   return (
@@ -47,24 +84,62 @@ export function ImageField({
             <X className="size-4" />
           </button>
         </div>
+      ) : (
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragActive(true);
+          }}
+          onDragLeave={() => setDragActive(false)}
+          onDrop={handleDrop}
+          onClick={() => fileInputRef.current?.click()}
+          className={`flex cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-6 text-center transition-colors ${
+            dragActive ? "border-indigo bg-indigo-soft" : "border-line hover:border-indigo"
+          }`}
+        >
+          {uploading ? (
+            <>
+              <Loader2 className="size-5 animate-spin text-indigo" />
+              <p className="text-xs text-ink-soft">Uploading…</p>
+            </>
+          ) : (
+            <>
+              <UploadCloud className="size-5 text-ink-soft" />
+              <p className="text-xs text-ink-soft">
+                <span className="font-medium text-indigo">Drag & drop</span> an image here, or click to browse
+              </p>
+              <p className="text-[10px] text-ink-soft">JPEG, PNG, WebP, GIF, SVG — up to 8MB</p>
+            </>
+          )}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) uploadFile(file);
+              e.target.value = ""; // allow re-selecting the same file later
+            }}
+            className="hidden"
+          />
+        </div>
+      )}
+
+      {uploadError ? (
+        <p className="flex items-center gap-2 text-xs text-red-600">
+          <AlertCircle className="size-3.5 shrink-0" /> {uploadError}
+        </p>
       ) : null}
 
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={openPicker}
-          className="flex shrink-0 items-center gap-1.5 rounded-full border border-line px-3.5 py-2 text-xs font-medium text-ink hover:border-indigo cursor-pointer"
-        >
-          <ImagePlus className="size-3.5" /> {value ? "Change image" : "Choose from Media Library"}
-        </button>
-        <input
-          name={name}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder="or paste a URL directly"
-          className="min-w-0 flex-1 rounded-lg border border-line bg-paper px-3 py-2 text-xs text-ink outline-none focus:border-indigo"
-        />
-      </div>
+      <input type="hidden" name={name} value={value} />
+
+      <button
+        type="button"
+        onClick={openPicker}
+        className="flex w-fit items-center gap-1.5 rounded-full border border-line px-3.5 py-2 text-xs font-medium text-ink hover:border-indigo cursor-pointer"
+      >
+        <ImagePlus className="size-3.5" /> Choose from Media Library instead
+      </button>
 
       {open ? (
         <div role="dialog" aria-modal="true" className="fixed inset-0 z-[200] flex items-center justify-center p-4">
@@ -79,9 +154,7 @@ export function ImageField({
             {loading ? (
               <p className="py-8 text-center text-sm text-ink-soft">Loading…</p>
             ) : items.length === 0 ? (
-              <p className="py-8 text-center text-sm text-ink-soft">
-                No images uploaded yet — go to Media Library to upload one first.
-              </p>
+              <p className="py-8 text-center text-sm text-ink-soft">No images uploaded yet.</p>
             ) : (
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
                 {items.map((item) => (

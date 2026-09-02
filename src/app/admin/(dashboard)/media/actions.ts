@@ -8,20 +8,30 @@ import { media, auditLogs } from "@/db/schema";
 import { requireEditor, requireAdmin, requireSession } from "@/lib/session";
 import { cloudinary, cloudinaryConfigured } from "@/lib/cloudinary";
 
-export type MediaFormState = { ok: boolean; error?: string };
+export type MediaFormState = { ok: boolean; error?: string; url?: string };
 
-const ALLOWED_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"]);
+const ALLOWED_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+  "image/svg+xml",
+]);
 const MAX_SIZE_BYTES = 8 * 1024 * 1024; // 8MB
 
 const altTextSchema = z.string().trim().max(300).optional();
 
-export async function uploadMedia(_prev: MediaFormState, formData: FormData): Promise<MediaFormState> {
+export async function uploadMedia(
+  _prev: MediaFormState,
+  formData: FormData,
+): Promise<MediaFormState> {
   const session = await requireEditor();
 
   if (!cloudinaryConfigured) {
     return {
       ok: false,
-      error: "Cloudinary isn't configured yet. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET to your environment — see .env.example.",
+      error:
+        "Cloudinary isn't configured yet. Add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET to your environment — see .env.example.",
     };
   }
 
@@ -32,10 +42,16 @@ export async function uploadMedia(_prev: MediaFormState, formData: FormData): Pr
     return { ok: false, error: "Choose a file to upload." };
   }
   if (!ALLOWED_TYPES.has(file.type)) {
-    return { ok: false, error: "Only JPEG, PNG, WebP, GIF and SVG images are supported." };
+    return {
+      ok: false,
+      error: "Only JPEG, PNG, WebP, GIF and SVG images are supported.",
+    };
   }
   if (file.size > MAX_SIZE_BYTES) {
-    return { ok: false, error: "File is larger than 8MB. Compress it and try again." };
+    return {
+      ok: false,
+      error: "File is larger than 8MB. Compress it and try again.",
+    };
   }
   if (!altText.success) {
     return { ok: false, error: "Alt text is too long." };
@@ -44,18 +60,28 @@ export async function uploadMedia(_prev: MediaFormState, formData: FormData): Pr
   let uploadResult;
   try {
     const buffer = Buffer.from(await file.arrayBuffer());
-    uploadResult = await new Promise<{ secure_url: string; public_id: string; bytes: number; width?: number; height?: number }>(
-      (resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream({ folder: "developx-web" }, (err, result) => {
+    uploadResult = await new Promise<{
+      secure_url: string;
+      public_id: string;
+      bytes: number;
+      width?: number;
+      height?: number;
+    }>((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "developx-web" },
+        (err, result) => {
           if (err || !result) return reject(err ?? new Error("Upload failed"));
           resolve(result);
-        });
-        stream.end(buffer);
-      }
-    );
+        },
+      );
+      stream.end(buffer);
+    });
   } catch (e) {
     console.error("Cloudinary upload failed:", e);
-    return { ok: false, error: "Upload failed. Check your Cloudinary credentials and try again." };
+    return {
+      ok: false,
+      error: "Upload failed. Check your Cloudinary credentials and try again.",
+    };
   }
 
   await db.insert(media).values({
@@ -78,7 +104,7 @@ export async function uploadMedia(_prev: MediaFormState, formData: FormData): Pr
   });
 
   revalidatePath("/admin/media");
-  return { ok: true };
+  return { ok: true, url: uploadResult.secure_url };
 }
 
 export async function deleteMedia(id: string) {
@@ -99,13 +125,24 @@ export async function deleteMedia(id: string) {
   }
 
   await db.delete(media).where(eq(media.id, id));
-  await db.insert(auditLogs).values({ userId: session.user.id, action: "media.deleted", entityType: "media", entityId: id });
+  await db
+    .insert(auditLogs)
+    .values({
+      userId: session.user.id,
+      action: "media.deleted",
+      entityType: "media",
+      entityId: id,
+    });
   revalidatePath("/admin/media");
 }
-
 
 export async function getMediaList() {
   await requireSession();
   const rows = await db.select().from(media).orderBy(desc(media.createdAt));
-  return rows.map((r) => ({ id: r.id, url: r.url, filename: r.filename, altText: r.altText }));
+  return rows.map((r) => ({
+    id: r.id,
+    url: r.url,
+    filename: r.filename,
+    altText: r.altText,
+  }));
 }
