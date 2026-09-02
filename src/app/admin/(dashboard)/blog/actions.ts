@@ -57,6 +57,7 @@ export async function createPost(_prev: PostFormState, formData: FormData): Prom
   });
 
   revalidatePath("/admin/blog");
+    revalidatePath("/", "layout");   // 👈 YEH LINE ADD KARO
   redirect("/admin/blog");
 }
 
@@ -88,6 +89,7 @@ export async function updatePost(id: string, _prev: PostFormState, formData: For
 
   revalidatePath("/admin/blog");
   revalidatePath(`/blog/${parsed.data.slug}`);
+  revalidatePath("/", "layout");   // 👈 YEH LINE ADD KARO
   redirect("/admin/blog");
 }
 
@@ -96,4 +98,5 @@ export async function deletePost(id: string) {
   await db.delete(blogPosts).where(eq(blogPosts.id, id));
   await db.insert(auditLogs).values({ userId: session.user.id, action: "blog.deleted", entityType: "blog_post", entityId: id });
   revalidatePath("/admin/blog");
+   revalidatePath("/", "layout");   // 👈 optional, but recommended
 }
