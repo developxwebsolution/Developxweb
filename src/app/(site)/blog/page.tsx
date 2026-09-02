@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
     "Practical, no-fluff articles on website performance, SEO, web development and software from the DevelopX Web team.",
   path: "/blog",
 });
-export const dynamic = "force-dynamic";
+
 export default async function BlogIndexPage() {
   const blogPosts = await getBlogPosts();
 
