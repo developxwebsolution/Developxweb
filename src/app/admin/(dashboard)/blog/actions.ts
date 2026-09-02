@@ -56,8 +56,14 @@ export async function createPost(_prev: PostFormState, formData: FormData): Prom
     entityId: parsed.data.slug,
   });
 
+  // Revalidate everything that could show this new post: the admin list,
+  // the public /blog listing page, the post's own detail page (in case
+  // the slug was reused after a delete), and the home page (which has
+  // its own "from the blog" teaser section pulling the latest posts).
   revalidatePath("/admin/blog");
-    revalidatePath("/", "layout");   // 👈 YEH LINE ADD KARO
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${parsed.data.slug}`);
+  revalidatePath("/");
   redirect("/admin/blog");
 }
 
@@ -87,9 +93,12 @@ export async function updatePost(id: string, _prev: PostFormState, formData: For
     entityId: id,
   });
 
+  // Same reasoning as createPost: cover the admin list, the public listing
+  // page, this post's own detail page, and the home page teaser section.
   revalidatePath("/admin/blog");
+  revalidatePath("/blog");
   revalidatePath(`/blog/${parsed.data.slug}`);
-  revalidatePath("/", "layout");   // 👈 YEH LINE ADD KARO
+  revalidatePath("/");
   redirect("/admin/blog");
 }
 
@@ -97,6 +106,10 @@ export async function deletePost(id: string) {
   const session = await requireAdmin();
   await db.delete(blogPosts).where(eq(blogPosts.id, id));
   await db.insert(auditLogs).values({ userId: session.user.id, action: "blog.deleted", entityType: "blog_post", entityId: id });
+
+  // A deleted post needs to disappear from the listing page and the home
+  // page teaser too, not just the admin table.
   revalidatePath("/admin/blog");
-   revalidatePath("/", "layout");   // 👈 optional, but recommended
+  revalidatePath("/blog");
+  revalidatePath("/");
 }
