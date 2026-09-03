@@ -14,10 +14,10 @@ import { sanitizeBlogParagraph } from "@/lib/render-links";
 
 import { site } from "@/data/site";
 
-export async function generateStaticParams() {
-  const blogPosts = await getBlogPosts();
-  return blogPosts.map((p) => ({ slug: p.slug }));
-}
+// export async function generateStaticParams() {
+//   const blogPosts = await getBlogPosts();
+//   return blogPosts.map((p) => ({ slug: p.slug }));
+// }
 
 export async function generateMetadata({
   params,
