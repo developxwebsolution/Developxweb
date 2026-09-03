@@ -18,7 +18,7 @@ export function CtaSection({
       />
       <Container className="relative flex flex-col items-center gap-6 text-center">
         <h2 className="max-w-xl font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">{title}</h2>
-        <p className="max-w-lg text-sm leading-6 text-ink-soft">{description}</p>
+        <p className="max-w-lg text-sm leading-6 text-white">{description}</p>
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button href="/contact" variant="primary" className=" hover:brightness-95">
             Start your project
